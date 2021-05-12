@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
+import { useInputValue } from '../../hooks/useInputValue';
+import { Form, Input, Title, Error } from './styles';
+import { SubmitButton } from '../SubmitButton';
 
-export const UserForm = ({ onSubmit }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export const UserForm = ({ onSubmit, title, error, disabled }) => {
+  const email = useInputValue("");
+  const password = useInputValue("");
 
-  return (<form onSubmit={onSubmit}>
-    <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-    <input type="submit" value3wiu=">Iniciar secion :V" />
-  </form>)
+  const handleSubmit = event => {
+    event.preventDefault();
+    onSubmit({
+      email: email.value,
+      password: password.value
+    })
+  }
+
+  return (
+    <Fragment>
+      <Title>{title}</Title>
+      <Form onSubmit={handleSubmit} disabled={disabled} >
+        <Input placeholder="Email" {...email} disabled={disabled} />
+        <Input type="password" placeholder="Password" {...password} disabled={disabled} />
+        <SubmitButton disabled={disabled} >{title}</SubmitButton>
+      </Form>
+      {error && <Error>{error}</Error>}
+    </Fragment>
+  )
+
 }

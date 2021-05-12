@@ -6,30 +6,9 @@ import { Link } from '@reach/router';
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/midudev/image/upload/w_300/q_80/v1560262103/dogs.png";
 
-export const PhotoCard = ({ id, likes = 0, src = DEFAULT_IMAGE }) => {
+export const PhotoCard = ({ id, likes = 0, src = DEFAULT_IMAGE, liked }) => {
   const ref = useRef(null);
   const [show, setShow] = useState(false);
-
-  const item= `liked-${id}`;
-
-  const [ liked, setLiked ] = useState(()=>{
-    try{
-      const lkd = window.localStorage.getItem(item);
-      return lkd==='true';
-    }
-    catch(e) {
-      return false;
-    }
-  });
-
-  const setLocalStorage = value => {
-    try{
-      window.localStorage.setItem(item, value);
-      setLiked(value)
-    }catch(e){
-      console.error(e);
-    }
-  }
 
   useEffect(function () {
     Promise.resolve(
@@ -65,10 +44,9 @@ export const PhotoCard = ({ id, likes = 0, src = DEFAULT_IMAGE }) => {
             {
               (toggleLike) => {
                 const handleFavClick = () => {
-                  !liked && toggleLike({ variables: {
+                  toggleLike({ variables: {
                     input: { id }
                   }})
-                  setLiked(!liked)
                 }
                 return <FavButton liked={liked} likes={likes} onClick={handleFavClick} />
               }

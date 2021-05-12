@@ -1,49 +1,36 @@
-import React, { Fragment } from 'react';
+import React, { useContext } from 'react';
 
 import { Logo } from './components/Logo/index';
 import { GlobalStyles } from './styles/GlobalStyles'
 import { Home } from './pages/Home';
-import { Router } from '@reach/router';
+import { Redirect, Router } from '@reach/router';
 import { Detail } from './pages/Detail';
 import { NavBar } from './components/NavBar';
 import { User } from './pages/User';
 import { Favs } from './pages/Favs';
 import { NotRegisterUser } from './pages/NotRegisterUser';
-import { NotRegisterFavs } from './pages/NotRegisterFavs';
-import Context from './Context';
-
-const UserLogged = ({ children }) => {
-  return children({ isAuth: false });
-}
+import { NotFound } from './pages/NotFound';
+import { Context } from './Context';
 
 export const App = () => {
-  const urlParams = new window.URLSearchParams(window.location.search)
-  const detailID = urlParams.get('detail');
-  console.log(detailID);
+  const { isAuth } = useContext(Context);
+  
   return (
     <div>
       <GlobalStyles />
       <Logo />
       <Router>
+        <NotFound default />
         <Home path='/' />
         <Home path='/pet/:id' />
         <Detail path='/detail/:detailId' />
+        {!isAuth && <NotRegisterUser path='/login' />}
+        {!isAuth && <Redirect from='/favs' to="/login" />}
+        {!isAuth && <Redirect from='/user' to="/login" />}
+        {isAuth && <Redirect from='/login' to="/" />}
+        <Favs path='/favs' />
+        <User path='/user' />
       </Router>
-      <Context.Consumer>
-        {({ isAuth }) => (
-          isAuth ?
-            <Router>
-              <Favs path='/favs' />
-              <User path='/user' />
-            </Router>
-            :
-            <Router>
-              <NotRegisterFavs path='/favs' />
-              <NotRegisterUser path='/user' />
-            </Router>
-        )
-        }
-      </Context.Consumer>
       <NavBar />
     </div>
   )
