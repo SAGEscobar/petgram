@@ -3,13 +3,18 @@ import { Context } from '../Context';
 import { UserForm } from '../components/UserForm';
 import { RegisterMutation } from '../containers/RegisterMutation';
 import { LoginMutation } from '../containers/LoginMutation';
+import { Helmet } from 'react-helmet';
 
-
-export const NotRegisterUser = () => {
+export default () => {
   const { activateAuth } = useContext(Context)
 
   return (
     <Fragment>
+      <Helmet>
+        <title>Login | Petgram</title>
+        <meta name='description' content='En esta pagina encuentras las imagenes a las que les has dado like' />
+      </Helmet>
+
       <RegisterMutation>
         {
           (register, { loading, data, error }) => {

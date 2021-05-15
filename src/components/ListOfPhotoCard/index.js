@@ -1,8 +1,9 @@
 import React from 'react';
 import { PhotoCard } from '../PhotoCard/index';
-import { withPhotos } from '../../HOC/withPhotos';
 
-export const ListOfPhotoCardsComponent = ({ data: { photos = [] } } = {}) => {
+// : { photos = [], refetch }
+
+export const ListOfPhotoCardsComponent = ( { photos = [] }) => {
   return (
     <React.Fragment>
       {photos.map(photo => <PhotoCard key={photo.id} id={photo.id} {...photo} />)}

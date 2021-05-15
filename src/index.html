@@ -8,5 +8,17 @@
 </head>
 <body>
     <div id="app"></div>
+    <noscript>
+        <h3>JavaScript es necesario para usar esta app :(</h3>
+    </noscript>
+    <script>
+        if ('serviceWorker' in navigator){
+            window.addEventListener('load', function (){
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => console.log('SW registrado'))
+                .catch(err => console.log('Error de registro de SW'))
+            })
+        }
+    </script>
 </body>
 </html>

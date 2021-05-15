@@ -6,11 +6,12 @@ import { onError } from '@apollo/client/link/error'
 import { App } from './App';
 import Context from './Context';
 
-const uri = 'https://petgram-server-zag-1h3thz3l8-sagescobar.vercel.app/graphql' //'https://petgram-server-zag.vercel.app/graphql';
+const uri = 'https://petgram-api-zag.vercel.app/graphql'
 const httpLink = new HttpLink({ uri });
 const authMiddleWare = new ApolloLink((operation, forward) => {
   const token = window.sessionStorage.getItem('token');
     const authorization = token ? `Bearer ${token}`: '';
+    console.log('Ejecutado')
     operation.setContext({
       headers: {
         authorization
@@ -28,7 +29,7 @@ const logOut = onError(({ networkError }) => {
 })
 
 const client = new ApolloClient({
-  link: from([logOut.concat(concat(authMiddleWare, httpLink)), uri]),
+  link: from([logOut.concat(concat(authMiddleWare, httpLink)), httpLink]),
   cache: new InMemoryCache()
 })
 

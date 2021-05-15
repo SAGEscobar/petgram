@@ -1,22 +1,22 @@
-import React, { useContext } from 'react';
-
+import React, { lazy, Suspense, useContext } from 'react';
 import { Logo } from './components/Logo/index';
 import { GlobalStyles } from './styles/GlobalStyles'
-import { Home } from './pages/Home';
 import { Redirect, Router } from '@reach/router';
-import { Detail } from './pages/Detail';
 import { NavBar } from './components/NavBar';
 import { User } from './pages/User';
-import { Favs } from './pages/Favs';
-import { NotRegisterUser } from './pages/NotRegisterUser';
 import { NotFound } from './pages/NotFound';
-import { Context } from './Context';
+import {Context} from './Context';
+
+const Favs = lazy(() => import('./pages/Favs'));
+const Home = lazy(() => import('./pages/Home'));
+const NotRegisterUser = lazy(() => import('./pages/NotRegisterUser'));
+const Detail = lazy(() => import('./pages/Detail'))
 
 export const App = () => {
   const { isAuth } = useContext(Context);
   
   return (
-    <div>
+    <Suspense fallback={<div />}>
       <GlobalStyles />
       <Logo />
       <Router>
@@ -25,13 +25,13 @@ export const App = () => {
         <Home path='/pet/:id' />
         <Detail path='/detail/:detailId' />
         {!isAuth && <NotRegisterUser path='/login' />}
-        {!isAuth && <Redirect from='/favs' to="/login" />}
-        {!isAuth && <Redirect from='/user' to="/login" />}
-        {isAuth && <Redirect from='/login' to="/" />}
+        {!isAuth && <Redirect noThrow from='/favs' to="/login" />}
+        {!isAuth && <Redirect noThrow from='/user' to="/login" />}
+        {isAuth && <Redirect noThrow from='/login' to="/" />}
         <Favs path='/favs' />
         <User path='/user' />
       </Router>
       <NavBar />
-    </div>
+      </Suspense>
   )
 }

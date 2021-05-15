@@ -1,6 +1,5 @@
 import React from 'react'
 import { PhotoCard } from '../components/PhotoCard/index';
-
 import { gql } from '@apollo/client';
 import { Query } from '@apollo/client/react/components';
 
@@ -15,7 +14,7 @@ query getSinglePhoto($id: ID!) {
     liked
   }
 }
-`;
+`
 
 const renderProp = ({ loading, error, data }) => {
   if(loading) return <h1> Loading... </h1>
